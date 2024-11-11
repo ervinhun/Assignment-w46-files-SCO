@@ -38,16 +38,28 @@ public class WorkoutAppController implements Initializable {
     }
 
     public void onLoadRoutinesClick(ActionEvent actionEvent) {
-        // TODO: Implement this
+        try {
+            workoutModel.loadRoutine();
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
+            alert.showAndWait();
+        }
     }
 
     public void onLoadUserWorkoutsClick(ActionEvent actionEvent) {
-        // TODO: Implement this
+        try {
+            workoutModel.loadWorkout();
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
+            alert.showAndWait();
+        }
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         lstUsers.setItems(workoutModel.getUsers());
+        lstUserWorkouts.setItems(workoutModel.getWorkouts());
+        lstRoutines.setItems(workoutModel.getRoutines());
     }
 
     public void onAddUserClick(ActionEvent actionEvent) {

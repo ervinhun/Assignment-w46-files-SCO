@@ -36,4 +36,9 @@ public class UserWorkout {
     public void setDate(String date) {
         this.date = date;
     }
+
+    @Override
+    public String toString() {
+        return this.id + ", " + this.userID + ", " + this.workoutID + ", " + this.date;
+    }
 }

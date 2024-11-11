@@ -1,13 +1,20 @@
 package dk.easv.assignmentworkoutfiles.bll;
 
+import dk.easv.assignmentworkoutfiles.be.Routine;
 import dk.easv.assignmentworkoutfiles.be.User;
+import dk.easv.assignmentworkoutfiles.be.UserWorkout;
+import dk.easv.assignmentworkoutfiles.dal.RoutineDAO;
 import dk.easv.assignmentworkoutfiles.dal.UserDAO;
+import dk.easv.assignmentworkoutfiles.dal.WorkoutDAO;
 
 import java.io.IOException;
 import java.util.List;
 
 public class WorkoutManager {
     private final UserDAO userDAO = new UserDAO();
+    private final WorkoutDAO workoutDAO = new WorkoutDAO();
+    private final RoutineDAO routineDAO = new RoutineDAO();
+
 
     // Add a new user
     public User addUser(User user) throws IOException {
@@ -46,5 +53,28 @@ public class WorkoutManager {
             throw new IllegalArgumentException("User name contains invalid characters");
         }
         return true;
+    }
+
+
+    /**
+     * User workout part
+     */
+    // Get all users
+    public List<UserWorkout> getWorkouts() throws IOException {
+        return workoutDAO.getAll();
+    }
+
+
+
+
+
+
+
+    /**
+     * Routine part
+     */
+    // Get all users
+    public List<Routine> getRoutines() throws IOException {
+        return routineDAO.getAll();
     }
 }
