@@ -4,9 +4,10 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="364.0" prefWidth="656.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.assignmentworkoutfiles.gui.controllers.WorkoutAppController">
+<?import javafx.scene.control.Label?>
+<AnchorPane prefHeight="364.0" prefWidth="866.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.assignmentworkoutfiles.gui.controllers.WorkoutAppController">
    <children>
-       <Button layoutX="14.0" layoutY="224.0" onAction="#onLoadUsersClick" prefHeight="25.0" prefWidth="200.0" text="Load users" />
+      <Button layoutX="14.0" layoutY="224.0" onAction="#onLoadUsersClick" prefHeight="25.0" prefWidth="200.0" text="Load users" />
       <ListView fx:id="lstUsers" layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" />
       <Button layoutX="228.0" layoutY="224.0" onAction="#onLoadRoutinesClick" prefHeight="25.0" prefWidth="200.0" text="Load workout routines" />
       <ListView fx:id="lstRoutines" layoutX="228.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" />
@@ -15,5 +16,14 @@
       <Button layoutX="14.0" layoutY="255.0" onAction="#onAddUserClick" prefHeight="25.0" prefWidth="200.0" text="Add random user" />
       <Button layoutX="14.0" layoutY="287.0" onAction="#onDeleteUserClick" prefHeight="25.0" prefWidth="200.0" text="Delete selected user" />
       <Button layoutX="14.0" layoutY="318.0" onAction="#onUpdateUserClick" prefHeight="25.0" prefWidth="200.0" text="Update selected user name" />
+      <Button layoutX="228.0" layoutY="255.0" onAction="#onAddRoutineClick" prefHeight="25.0" prefWidth="200.0" text="Add random routine" />
+      <Button layoutX="443.0" layoutY="255.0" onAction="#onAddWorkoutClick" prefHeight="25.0" prefWidth="200.0" text="Add random workout" />
+      <Button layoutX="228.0" layoutY="287.0" onAction="#onDeleteRoutineClick" prefHeight="25.0" prefWidth="200.0" text="Delete selected routine" />
+      <Button layoutX="443.0" layoutY="287.0" onAction="#onDeleteWorkoutClick" prefHeight="25.0" prefWidth="200.0" text="Delete selected Workout" />
+      <Button layoutX="228.0" layoutY="318.0" onAction="#onUpdateRoutineClick" prefHeight="25.0" prefWidth="200.0" text="Update selected routine" />
+      <Button layoutX="443.0" layoutY="318.0" onAction="#onUpdateWorkoutClick" prefHeight="25.0" prefWidth="200.0" text="Update selected Workout" />
+      <ListView fx:id="lstOneUserWorkout" layoutX="654.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" visible="false" />
+      <Label layoutX="654" layoutY="224" fx:id="lblUserName" text="User" visible="false" />
+      <Button layoutX="654" layoutY="255" prefHeight="25" prefWidth="200" fx:id="btnClose" text="Close" visible="false" onAction="#onCloseButtonClick" />
    </children>
 </AnchorPane>
