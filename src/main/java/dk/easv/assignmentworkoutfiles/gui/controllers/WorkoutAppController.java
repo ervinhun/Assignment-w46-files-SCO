@@ -4,6 +4,7 @@ import dk.easv.assignmentworkoutfiles.be.OnePWorkout;
 import dk.easv.assignmentworkoutfiles.be.Routine;
 import dk.easv.assignmentworkoutfiles.be.User;
 import dk.easv.assignmentworkoutfiles.be.UserWorkout;
+import dk.easv.assignmentworkoutfiles.exceptioins.WorkoutException;
 import dk.easv.assignmentworkoutfiles.gui.models.WorkoutModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,7 +12,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Random;
@@ -41,7 +41,7 @@ public class WorkoutAppController implements Initializable {
     public void onLoadUsersClick(ActionEvent actionEvent) {
         try {
             workoutModel.loadUsers();
-        } catch (IOException e) {
+        } catch (WorkoutException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
             alert.showAndWait();
         }
@@ -50,7 +50,7 @@ public class WorkoutAppController implements Initializable {
     public void onLoadRoutinesClick(ActionEvent actionEvent) {
         try {
             workoutModel.loadRoutine();
-        } catch (IOException e) {
+        } catch (WorkoutException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
             alert.showAndWait();
         }
@@ -59,7 +59,7 @@ public class WorkoutAppController implements Initializable {
     public void onLoadUserWorkoutsClick(ActionEvent actionEvent) {
         try {
             workoutModel.loadWorkout();
-        } catch (IOException e) {
+        } catch (WorkoutException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
             alert.showAndWait();
         }
@@ -73,13 +73,13 @@ public class WorkoutAppController implements Initializable {
         lstUsers.setOnMouseClicked(event -> {
             try {
                 handleDoubleClick(event, lstUsers);
-            } catch (IOException e) {
+            } catch (WorkoutException e) {
                 throw new RuntimeException(e);
             }
         });
     }
 
-    private void handleDoubleClick(MouseEvent event, ListView<User> lstUsers) throws IOException {
+    private void handleDoubleClick(MouseEvent event, ListView<User> lstUsers) throws WorkoutException {
         if (lstUsers.getSelectionModel().getSelectedItem() != null) {
             if (!lstRoutines.getItems().isEmpty() && !lstUserWorkouts.getItems().isEmpty()) {
                 showFourthList(true);
@@ -88,6 +88,7 @@ public class WorkoutAppController implements Initializable {
                 lblUserName.setText("User: " + nameToShow);
                 lstOneUserWorkout.setItems(workoutModel.getOnePersonWorkout(lstUsers.getSelectionModel().getSelectedItem()));
             }
+            else throw new RuntimeException("Lists must be loaded");
         }
         //workoutModel.getOnePersonWorkout();
         //lstOneUserWorkout.setItems(workoutModel.getOnePersonWorkout());
@@ -97,7 +98,7 @@ public class WorkoutAppController implements Initializable {
     public void onAddUserClick(ActionEvent actionEvent) {
         try {
             workoutModel.addUser(getRandomName());
-        } catch (IOException e) {
+        } catch (WorkoutException e) {
             showAlertWindow(e);
         }
     }
@@ -106,7 +107,7 @@ public class WorkoutAppController implements Initializable {
         try {
             String[] toPut = getRandomRoutine();
             workoutModel.addRoutine(toPut[0], toPut[1], getRandomRoutineTime());
-        } catch (IOException e) {
+        } catch (WorkoutException e) {
             showAlertWindow(e);
         }
     }
@@ -117,7 +118,7 @@ public class WorkoutAppController implements Initializable {
             int workoutID = getRandomWorkoutID();
             String date = getRnadomDate();
             workoutModel.addWorkout(userID, workoutID, date);
-        } catch (IOException e) {
+        } catch (WorkoutException e) {
             showAlertWindow(e);
         }
     }
@@ -129,7 +130,7 @@ public class WorkoutAppController implements Initializable {
         Routine selectedRoutine = lstRoutines.getSelectionModel().getSelectedItem();
         try {
             workoutModel.deleteRoutine(selectedRoutine);
-        } catch (IOException e) {
+        } catch (WorkoutException e) {
             showAlertWindow(e);
         }
     }
@@ -138,7 +139,7 @@ public class WorkoutAppController implements Initializable {
         UserWorkout selectedWorkOut = lstUserWorkouts.getSelectionModel().getSelectedItem();
         try {
             workoutModel.deleteWorkout(selectedWorkOut);
-        } catch (IOException e) {
+        } catch (WorkoutException e) {
             showAlertWindow(e);
         }
     }
@@ -150,7 +151,7 @@ public class WorkoutAppController implements Initializable {
         selectedWorkOut.setDate(getRnadomDate());
         try {
             workoutModel.updateWorkout(selectedWorkOut);
-        } catch (IOException e) {
+        } catch (WorkoutException e) {
             showAlertWindow(e);
         }
     }
@@ -163,7 +164,7 @@ public class WorkoutAppController implements Initializable {
         selectedRoutine.setTime(getRandomRoutineTime());
         try {
             workoutModel.updateRoutine(selectedRoutine);
-        } catch (IOException e) {
+        } catch (WorkoutException e) {
             showAlertWindow(e);
         }
     }
@@ -172,7 +173,7 @@ public class WorkoutAppController implements Initializable {
         User selectedUser = lstUsers.getSelectionModel().getSelectedItem();
         try {
             workoutModel.deleteUser(selectedUser);
-        } catch (IOException e) {
+        } catch (WorkoutException e) {
             showAlertWindow(e);
         }
     }
@@ -181,7 +182,7 @@ public class WorkoutAppController implements Initializable {
         selectedUser.setUsername(getRandomName());
         try {
             workoutModel.updateUser(selectedUser);
-        } catch (IOException e) {
+        } catch (WorkoutException e) {
             showAlertWindow(e);
         }
     }

@@ -4,9 +4,8 @@ import dk.easv.assignmentworkoutfiles.be.OnePWorkout;
 import dk.easv.assignmentworkoutfiles.be.Routine;
 import dk.easv.assignmentworkoutfiles.be.User;
 import dk.easv.assignmentworkoutfiles.be.UserWorkout;
-import dk.easv.assignmentworkoutfiles.dal.RoutineDAO;
-import dk.easv.assignmentworkoutfiles.dal.UserDAO;
-import dk.easv.assignmentworkoutfiles.dal.WorkoutDAO;
+import dk.easv.assignmentworkoutfiles.dal.*;
+import dk.easv.assignmentworkoutfiles.exceptioins.WorkoutException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,13 +14,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class WorkoutManager {
-    private final UserDAO userDAO = new UserDAO();
-    private final WorkoutDAO workoutDAO = new WorkoutDAO();
-    private final RoutineDAO routineDAO = new RoutineDAO();
+    private final IUserDAO userDAO = new UserDAO();
+    private final IWorkoutDAO workoutDAO = new WorkoutDAO();
+    private final IRoutineDAO routineDAO = new RoutineDAO();
 
 
     // Add a new user
-    public User addUser(User user) throws IOException {
+    public User addUser(User user) throws WorkoutException {
         if (sanityCheckUserName(user.getUsername())) {
             return userDAO.add(user);
         }
@@ -29,19 +28,19 @@ public class WorkoutManager {
     }
 
     // Update an existing user
-    public void updateUser(User updatedUser) throws IOException {
+    public void updateUser(User updatedUser) throws WorkoutException {
         if (sanityCheckUserName(updatedUser.getUsername())) {
             userDAO.update(updatedUser);
         }
     }
 
     // Get all users
-    public List<User> getUsers() throws IOException {
+    public List<User> getUsers() throws WorkoutException {
         return userDAO.getAll();
     }
 
     // Delete a user
-    public void deleteUser(User user) throws IOException {
+    public void deleteUser(User user) throws WorkoutException {
         userDAO.delete(user);
     }
 
@@ -52,22 +51,22 @@ public class WorkoutManager {
      * User workout part
      */
     // Get all users
-    public List<UserWorkout> getWorkouts() throws IOException {
+    public List<UserWorkout> getWorkouts() throws WorkoutException {
         return workoutDAO.getAll();
     }
 
-    public UserWorkout addWorkout(UserWorkout userWorkout) throws IOException {
+    public UserWorkout addWorkout(UserWorkout userWorkout) throws WorkoutException {
         if (checkForCorrectWorkout(userWorkout.getUserID(), userWorkout.getWorkoutID(), userWorkout.getDate())) {
             return workoutDAO.add(userWorkout);
         }
         return null;
     }
 
-    public void deleteWorkout(UserWorkout selectedWorkOut) throws IOException {
+    public void deleteWorkout(UserWorkout selectedWorkOut) throws WorkoutException {
         workoutDAO.delete(selectedWorkOut);
     }
 
-    public void updateWorkout(UserWorkout selectedWorkOut) throws IOException {
+    public void updateWorkout(UserWorkout selectedWorkOut) throws WorkoutException {
         workoutDAO.update(selectedWorkOut);
     }
 
@@ -80,21 +79,21 @@ public class WorkoutManager {
      * Routine part
      */
     // Get all users
-    public List<Routine> getRoutines() throws IOException {
+    public List<Routine> getRoutines() throws WorkoutException {
         return routineDAO.getAll();
     }
-    public Routine addRoutine(Routine routine) throws IOException {
+    public Routine addRoutine(Routine routine) throws WorkoutException {
         if (!routine.getDescription().isEmpty()) {
             return routineDAO.add(routine);
         }
         return null;
     }
 
-    public void deleteRoutine(Routine routine) throws IOException {
+    public void deleteRoutine(Routine routine) throws WorkoutException {
         routineDAO.delete(routine);
     }
 
-    public void updateRoutine(Routine selectedRoutine) throws IOException {
+    public void updateRoutine(Routine selectedRoutine) throws WorkoutException {
         if (!selectedRoutine.getDescription().isEmpty() && !selectedRoutine.getDetails().isEmpty()) {
             routineDAO.update(selectedRoutine);
         }
@@ -123,11 +122,21 @@ public class WorkoutManager {
      * Checking the info for correctness
      */
 
-    private boolean checkForCorrectWorkout(int userID, int workoutID, String date) throws IOException {
+    private boolean checkForCorrectWorkout(int userID, int workoutID, String date) throws WorkoutException {
         WorkoutDAO workoutDAO = new WorkoutDAO();
-        List<UserWorkout> workouts = new ArrayList<>(workoutDAO.getAll());
+        List<UserWorkout> workouts = null;
+        try {
+            workouts = new ArrayList<>(workoutDAO.getAll());
+        } catch (WorkoutException e) {
+            throw new RuntimeException(e);
+        }
         UserDAO userDAO = new UserDAO();
-        List<User> users = new ArrayList<>(userDAO.getAll());
+        List<User> users = null;
+        try {
+            users = new ArrayList<>(userDAO.getAll());
+        } catch (WorkoutException e) {
+            throw new RuntimeException(e);
+        }
         List<Integer> userIDs = new ArrayList<>();
         List<Integer> workoutIDs = new ArrayList<>();
         String[] day = date.split("-");
@@ -158,9 +167,4 @@ public class WorkoutManager {
         }
         return true;
     }
-
-    /**
-     * Get the workout plan for one user
-     */
-
 }
